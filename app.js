@@ -2,8 +2,16 @@ const form = document.querySelector("#add-todo");
 const input = document.querySelector("#name");
 const todoList = document.querySelector("#todo-list");
 
-const savedTodos = JSON.parse(localStorage.getItem("todos"));
-for (let i =0; i<savedTodos.length; i++){
+function removeItemByValue(value){
+    for (let key in localStorage) {
+        if(localStorage.getItem(key) === value) {
+            localStorage.removeItem(key)
+        }
+    }
+}
+
+const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+for (let i = 0; i<savedTodos.length; i++){
     const pastTodo = document.createElement("li");
     pastTodo.innerText = savedTodos[i].task;
     pastTodo.isCompleted = savedTodos[i].isCompleted ? true : false;
@@ -35,7 +43,8 @@ form.addEventListener("submit", (e)=> {
 
 todoList.addEventListener('click', (e)=> {
     if (e.target.tagName === "BUTTON") {
-        e.target.parentElement.remove()
+        e.target.parentElement.remove();
+        removeItemByValue(JSON.stringify(e.target.parentElement.innerText))
     } else if (e.target.tagName === "LI" && e.target.isCompleted === false) {
         e.target.classList.add("crossed-out")
         e.target.isCompleted = true;
