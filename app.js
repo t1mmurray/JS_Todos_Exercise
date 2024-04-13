@@ -2,6 +2,7 @@ const form = document.querySelector("#add-todo");
 const input = document.querySelector("#name");
 const todoList = document.querySelector("#todo-list");
 
+// function declaration to be used when removing a specific todo from localStorage
 function removeItemByValue(value){
     for (let key in localStorage) {
         if(localStorage.getItem(key) === value) {
@@ -10,6 +11,7 @@ function removeItemByValue(value){
     }
 }
 
+// retrieving past todos
 const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
 for (let i = 0; i<savedTodos.length; i++){
     const pastTodo = document.createElement("li");
@@ -21,6 +23,7 @@ for (let i = 0; i<savedTodos.length; i++){
     todoList.append(pastTodo)
 }
 
+// adding todos to list and saving to localStorage
 form.addEventListener("submit", (e)=> {
     e.preventDefault();
     
@@ -40,10 +43,11 @@ form.addEventListener("submit", (e)=> {
     localStorage.setItem("todos", JSON.stringify(savedTodos));
 })
 
-
+// Delete button, crossing todos off, saving in localStorage
 todoList.addEventListener('click', (e)=> {
     if (e.target.tagName === "BUTTON") {
         e.target.parentElement.remove();
+        // This one isn't working! When you click the X button, it should also remove that todo from localStorage
         removeItemByValue(JSON.stringify(e.target.parentElement.innerText))
     } else if (e.target.tagName === "LI" && e.target.isCompleted === false) {
         e.target.classList.add("crossed-out")
